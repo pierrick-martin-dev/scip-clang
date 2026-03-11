@@ -1,5 +1,10 @@
 # scip-clang ChangeLog
 
+## v0.4.1 (beta)
+
+- Populate enclosing_range.
+  (https://github.com/sourcegraph/scip-clang/pull/504)
+
 ## v0.4.0 (beta)
 
 - Updated LLVM to version 21.
