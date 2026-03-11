@@ -276,12 +276,10 @@ TEST_CASE("COMPDB_PARSING") {
 AbsolutePath deriveRootInSourceDir(RootRelativePathRef testDir,
                                    const RootPath &rootInSandbox,
                                    RootRelativePathRef tuPath) {
-  llvm::sys::fs::file_status fileStatus;
   auto tuPathInSandbox = rootInSandbox.makeAbsolute(tuPath);
-  llvm::sys::fs::status(tuPathInSandbox.asStringRef(), fileStatus,
-                        /*follow*/ false);
-  ENFORCE(llvm::sys::fs::is_symlink_file(fileStatus));
 
+  // Resolve to the real path, handling both symlinks (Bazel sandbox)
+  // and regular files (non-Bazel builds) transparently.
   llvm::SmallString<64> realPathSmallStr;
   llvm::sys::fs::real_path(tuPathInSandbox.asStringRef(), realPathSmallStr);
   auto realPathStr = realPathSmallStr.str();
