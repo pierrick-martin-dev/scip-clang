@@ -15,3 +15,5 @@
 /result
 /flake.lock
 build/
+/index.scip
+/indexer/scip-clang
