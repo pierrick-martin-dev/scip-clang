@@ -20,9 +20,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - platform: "ubuntu-24.04-32core-graph-team-amd64"
+          - platform: "ubuntu-24.04"
             config: "dev"
-          - platform: "ubuntu-24.04-32core-graph-team-amd64"
+          - platform: "ubuntu-24.04"
             config: "release"
           # macOS 14 => arm64
           - platform: "macos-14"
@@ -32,7 +32,6 @@ jobs:
       TAG: ${{ github.event.ref }}
     permissions:
       contents: "read"
-      id-token: "write"
     defaults:
       run:
         shell: bash
@@ -57,13 +56,6 @@ jobs:
               sudo npm install -g @bazel/bazelisk
             fi
           fi
-      - id: auth
-        name: "🔓 Authenticate to Google Cloud"
-        uses: "google-github-actions/auth@v2"
-        with:
-          workload_identity_provider: ${{ secrets.GCP_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
-          create_credentials_file: true
       - name: "🚧 Build scip-clang"
         run: |
           if [ "$RUNNER_OS" == "macOS" ]; then
