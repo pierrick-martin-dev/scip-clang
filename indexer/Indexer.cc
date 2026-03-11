@@ -514,8 +514,8 @@ void TuIndexer::saveFieldDecl(const clang::FieldDecl &fieldDecl) {
   }
   scip::SymbolInformation symbolInfo{};
   this->getDocComment(fieldDecl).addTo(symbolInfo);
-  this->saveDefinition(optSymbol.value(), fieldDecl.getLocation(), symbolInfo, 0,
-                       fieldDecl.getSourceRange());
+  this->saveDefinition(optSymbol.value(), fieldDecl.getLocation(), symbolInfo,
+                       0, fieldDecl.getSourceRange());
 }
 
 void TuIndexer::saveFieldReference(const clang::FieldDecl &fieldDecl,
@@ -1236,7 +1236,9 @@ PartialDocument &TuIndexer::saveOccurrence(SymbolNameRef symbol,
   auto begin = enclosingRange.getBegin();
   auto end = enclosingRange.getEnd();
   if (enclosingRange.isValid() && begin.isValid() && end.isValid()
-      && begin != end && begin < end) {
+      && begin != end && begin < end
+      && this->sourceManager.getFileID(begin)
+             == this->sourceManager.getFileID(end)) {
     auto [localRange, enclosingFileId] =
         FileLocalSourceRange::fromNonEmpty(this->sourceManager, enclosingRange);
     if (enclosingFileId == fileId) {
