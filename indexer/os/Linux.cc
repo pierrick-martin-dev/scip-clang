@@ -56,9 +56,9 @@ std::string addr2line(std::string_view programName, void const *const *addr,
   return to_string(os);
 }
 std::string getProgramName() {
-  char dest[512] = {}; // explicitly zero out
+  char dest[PATH_MAX] = {}; // explicitly zero out
 
-  if (readlink("/proc/self/exe", dest, PATH_MAX) < 0) {
+  if (readlink("/proc/self/exe", dest, sizeof(dest) - 1) < 0) {
     return "<error>";
   }
 
