@@ -25,3 +25,16 @@ void use_outer() {
 using IntAlias = int;
 void int_to_void_fn(int) {}
 void same_hash_as_previous(IntAlias) {}
+
+// extern "C" functions should be indexed like regular functions
+extern "C" void extern_c_func() {}
+
+extern "C" {
+  void extern_c_block_func() {}
+}
+
+// extern "C" with a body that calls other functions
+void helper() {}
+extern "C" void extern_c_caller() {
+  helper();
+}

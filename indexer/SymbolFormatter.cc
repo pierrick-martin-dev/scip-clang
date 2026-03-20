@@ -360,6 +360,10 @@ SymbolFormatter::getContextSymbol(const clang::DeclContext &declContext,
     // references, so this is OK for now.
     return this->getFunctionSymbol(*functionDecl);
   }
+  if (auto *linkageSpecDecl =
+          llvm::dyn_cast<clang::LinkageSpecDecl>(&declContext)) {
+    return this->getContextSymbol(*linkageSpecDecl->getDeclContext(), loc);
+  }
   // TODO: Handle all cases of DeclContext here:
   // Done
   // - TranslationUnitDecl
@@ -367,12 +371,12 @@ SymbolFormatter::getContextSymbol(const clang::DeclContext &declContext,
   // - NamespaceDecl
   // - TagDecl
   // - FunctionDecl
+  // - LinkageSpecDecl
   // Pending:
   // - OMPDeclareReductionDecl
   // - OMPDeclareMapperDecl
   // - ObjCMethodDecl
   // - ObjCContainerDecl
-  // - LinkageSpecDecl
   // - ExportDecl
   // - BlockDecl
   // - CapturedDecl

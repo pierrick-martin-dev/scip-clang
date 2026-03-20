@@ -42,3 +42,21 @@
   void same_hash_as_previous(IntAlias) {}
 //     ^^^^^^^^^^^^^^^^^^^^^ definition [..] same_hash_as_previous(d4f767463ce0a6b3).
 //                           ^^^^^^^^ reference [..] IntAlias#
+  
+  // extern "C" functions should be indexed like regular functions
+  extern "C" void extern_c_func() {}
+//                ^^^^^^^^^^^^^ definition [..] extern_c_func(49f6e7a06ebc5aa8).
+  
+  extern "C" {
+    void extern_c_block_func() {}
+//       ^^^^^^^^^^^^^^^^^^^ definition [..] extern_c_block_func(49f6e7a06ebc5aa8).
+  }
+  
+  // extern "C" with a body that calls other functions
+  void helper() {}
+//     ^^^^^^ definition [..] helper(49f6e7a06ebc5aa8).
+  extern "C" void extern_c_caller() {
+//                ^^^^^^^^^^^^^^^ definition [..] extern_c_caller(49f6e7a06ebc5aa8).
+    helper();
+//  ^^^^^^ reference [..] helper(49f6e7a06ebc5aa8).
+  }
